@@ -1,5 +1,5 @@
 package client;
 
-public class Player {
-
+public abstract class Player {
+	public abstract String getMove(Object obj);
 }
