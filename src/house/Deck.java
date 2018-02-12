@@ -24,11 +24,11 @@ class Deck {
 	/**
 	 * Creates a shuffled ArrayList consisting of the specified number of decks
 	 */
-	void makeDeck() {
+	void createDeck() {
 		this.deck = new ArrayList<String>(nOfDecks * 54);
 		for (int deck = 0; deck < nOfDecks; deck++) {
 			for (int suit = 0; suit < 4; suit++) {
-				for (int card = 0; card < 31; card++) {
+				for (int card = 0; card < 13; card++) {
 					this.deck.add(singleSuit[card]);
 				}
 			}
@@ -50,7 +50,7 @@ class Deck {
 			deck.remove(0);
 		}
 		if (deck.size() <= nOfDecks * 13) {
-			makeDeck();
+			createDeck();
 		}
 		return cards;
 	}

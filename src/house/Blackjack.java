@@ -39,7 +39,7 @@ public class Blackjack {
 		
 		for (int i = 0; i < nOfPlayers + 1; i++) {
 			playerScores[i] = 0;
-			stillInPlay[i] = false;
+			stillInPlay[i] = true;
 		}
 		
 		startGame();
@@ -67,6 +67,7 @@ public class Blackjack {
 	 * Populates the board with players' initial hands
 	 */
 	private void startGame() {
+		deck.createDeck();
 		for (int p = 0; p < players.length; p++) {
 			board.addHand(deck.getHand());
 		}
@@ -101,16 +102,16 @@ public class Blackjack {
 	 * @return	boolean
 	 */
 	private boolean anyStillInPlay() {
-		boolean end = false;
+		boolean inPlay = false;
 		for (int p = 1; p < players.length; p++) {
 			if (playerScores[p] == 21) {
-				end = false;
+				inPlay = false;
 				break;
 			} else if (stillInPlay[p]) {
-				end = true;
+				inPlay = true;
 			}
 		}
-		return end;
+		return inPlay;
 	}
 	/**
 	 * Calculates which human player has won the game
@@ -135,9 +136,25 @@ public class Blackjack {
 	 * @param p	Player number
 	 */
 	private void playTurn(int p) {
-		String move = getMove(p);
-		makeMove(p, move);
-		playerScores[p] = board.getScore(p);		
+		while (true) {
+			String move = getMove(p);
+			if (move.toLowerCase().equals("h")) {
+				board.addCard(deck.hitMe(), p);
+				playerScores[p] = board.getScore(p);
+				if (playerScores[p] > 21) {
+					stillInPlay[p] = false;
+				}
+				break;
+			} else if (move.toLowerCase().equals("s")) {
+				stillInPlay[p] = false;
+				break;
+			} else if (move.toLowerCase().equals("f")) {
+				stillInPlay[p] = false;
+				break;
+			} else {
+				System.out.println("INVALID MOVE.");
+			}
+		}		
 	}
 	
 	/**
@@ -156,26 +173,11 @@ public class Blackjack {
 	}
 	
 	/**
-	 * Applies player move
-	 * @param p		Player number
-	 * @param move	Chosen move
-	 */
-	private void makeMove(int p, String move) {
-		if (move.equals("H")) {
-			board.addCard(deck.hitMe(), p);
-		} else if (move.equals("S")) {
-			stillInPlay[p] = false;
-		} else if (move.equals("F")) {
-			//TODO: Implement fold
-			stillInPlay[p] = false;
-		}
-	}
-	
-	/**
 	 * Declares a winner
 	 * @param p	Winning player
 	 */
 	private void declareWinner(int p) {
+		board.printBoard(0);
 		if (p == 0) {
 			System.out.println("THE HOUSE ALWAYS WINS.");
 		} else {

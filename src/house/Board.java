@@ -46,6 +46,9 @@ class Board {
 		for (String card : hand) {
 			score += cardValues.get(card);
 		}
+		if (score > 21 && hand.contains("A")) {
+			score -= 10;
+		}
 		return score;
 	}
 	
@@ -63,6 +66,7 @@ class Board {
 	 * @param p	Chosen player
 	 */
 	void printBoard(int p) {
+		System.out.println("-" + Integer.toString(p) + "-");
 		System.out.println(playerHands.get(0).get(0));
 		System.out.println(playerHands.get(p));
 		//TODO: Implement
