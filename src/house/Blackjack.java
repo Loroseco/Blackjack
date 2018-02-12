@@ -192,7 +192,7 @@ public class Blackjack {
 	 * @return
 	 */
 	private int playDealer() {
-		while (playerScores[0] < 21) {
+		while (stillInPlay[0]) {
 			playTurn(0);
 		}
 		return 0;

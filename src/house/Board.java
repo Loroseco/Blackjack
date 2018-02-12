@@ -46,9 +46,12 @@ class Board {
 		for (String card : hand) {
 			score += cardValues.get(card);
 		}
-
-		if (score > 21 && hand.contains("A")) {
-			score -= 10;
+		for (String card : hand) {
+			if (score < 22) {
+				break;
+			} else if (card.equals("A")) {
+				score -= 10;
+			}
 		}
 		return score;
 	}
