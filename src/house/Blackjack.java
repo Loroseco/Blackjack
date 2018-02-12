@@ -1,6 +1,5 @@
 package house;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import client.*;
@@ -11,7 +10,7 @@ public class Blackjack {
 	private Deck deck;
 	private Board board;
 	private int[] playerScores;
-	private boolean[] playerOutcomes;
+	private boolean[] stillInPlay;
 	private Scanner scan;
 	
 	void play(int nOfPlayers, int nOfDecks, Scanner scan) {
@@ -20,25 +19,30 @@ public class Blackjack {
 		players[0] = new Dealer();
 		players[1] = new Human();
 		playerScores = new int[nOfPlayers + 1];
-		playerOutcomes = new boolean[nOfPlayers + 1];
+		stillInPlay = new boolean[nOfPlayers + 1];
 		deck = new Deck(nOfDecks);
 		board = new Board(nOfPlayers);
 		this.scan = scan;
 		
 		for (int i = 0; i < nOfPlayers + 1; i++) {
 			playerScores[i] = 0;
-			playerOutcomes[i] = false;
+			stillInPlay[i] = false;
 		}
 		
 		startGame();
 		
-		int[] playerWinner = playHumans();
+		int playerWinner = playHumans();
 		
-		if (playerWinner[1] > 22) {
+		if (playerWinner == 0) {
 			declareWinner(0);
 		} else {
-			int score = (playerWinner[1] == 21) ? playDealer(true) : playDealer(false);
-			if (score == 21) {
+			if (playerScores[playerWinner] == 22) {
+				playDealer(true);
+			} else {
+				playDealer(false);
+			}
+
+			if (playerScores[0] >= playerScores[playerWinner]) {
 				declareWinner(0);
 			} else {
 				declareWinner(1);
@@ -50,33 +54,50 @@ public class Blackjack {
 		for (int p = 0; p < players.length; p++) {
 			board.addHand(deck.getHand());
 		}
-		board.printBoard();
+		board.printBoardBeforeTurn(0);
 	}
 	
-	private int[] playHumans() {
+	private int playHumans() {
 		boolean end = false;
+		int turnNumber = 0;
 		while (!end) {
+			turnNumber++;
 			for (int p = 1; p < players.length; p++) {
-				playTurn(p);
-			}
-			
-			end = true;
-			for (int p = 1; p < players.length; p++) {
-				if (playerScores[p] == 21) {
-					break;
-				} else if (!playerOutcomes[p]) {
-					end = false;
-					break;
+				if (stillInPlay[p]) {
+					board.printBoardBeforeTurn(p);
+					playTurn(p);
+					board.printBoardAfterTurn(p);
 				}
 			}
+			
+			end = !anyStillInPlay(turnNumber);
 		}
 		
-		int[] winner = {0, 0};
+		return calculatePlayerWinner(turnNumber);
+	}
+	
+	private boolean anyStillInPlay(int turnNumber) {
+		boolean end = false;
 		for (int p = 1; p < players.length; p++) {
-			if (playerScores[p] > winner[1]) {
-				winner[0] = p;
-				winner[1] = playerScores[p];
+			if (playerScores[p] == 21 && turnNumber == 1) {
+				end = false;
+				break;
+			} else if (stillInPlay[p]) {
+				end = true;
 			}
+		}
+		return end;
+	}
+	
+	private int calculatePlayerWinner(int turnNumber) {
+		int winner = 0;
+		for (int p = 1; p < players.length; p++) {
+			if (playerScores[p] > playerScores[winner] && playerScores[p] < 22) {
+				winner = p;
+			}
+		}
+		if (playerScores[winner] == 21 && turnNumber == 1) {
+			playerScores[winner] = 22;
 		}
 		return winner;
 	}
@@ -88,12 +109,24 @@ public class Blackjack {
 	}
 	
 	private String getMove(int p) {
-		//TODO: Implement
-		return "n";
+		String move;
+		if (p == 0) {
+			move = players[0].getMove(playerScores[0]);
+		} else {
+			move = players[p].getMove(scan);
+		}
+		return move;
 	}
 	
 	private void makeMove(int p, String move) {
-		//TODO: Implement
+		if (move.equals("H")) {
+			board.addCard(deck.hitMe(), p);
+		} else if (move.equals("S")) {
+			stillInPlay[p] = false;
+		} else if (move.equals("F")) {
+			//TODO: Implement fold
+			stillInPlay[p] = false;
+		}
 	}
 	
 	private void declareWinner(int p) {
@@ -104,8 +137,16 @@ public class Blackjack {
 		}
 	}
 	
-	private int playDealer(boolean doesPlayerHave21) {
-		//TODO: Implement
+	private int playDealer(boolean playerHas21) {
+		while (playerScores[0] < 21) {
+			playTurn(0);
+			if (playerHas21) {
+				if (playerScores[0] == 21) {
+					playerScores[0] = 22;
+				}
+				break;
+			}
+		}
 		return 0;
 	}
 }

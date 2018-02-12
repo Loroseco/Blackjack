@@ -26,7 +26,7 @@ class Board {
 		cardValues.put("K", 10);
 	}
 	
-	public int getScore(int player) {
+	int getScore(int player) {
 		int score = 0;
 		ArrayList<String> hand = playerHands.get(player);
 		for (String card : hand) {
@@ -35,13 +35,21 @@ class Board {
 		return score;
 	}
 	
-	public void printBoard() {
+	void printBoardBeforeTurn(int p) {
+		//TODO: Implement
+	}
+	
+	void printBoardAfterTurn(int p) {
 		//TODO: Implement
 	}
 	
 	void addHand(ArrayList<String> hand) {
 		playerHands.add(hand);
 		
+	}
+	
+	void addCard(String card, int hand) {
+		playerHands.get(hand).add(card);
 	}
 
 }
