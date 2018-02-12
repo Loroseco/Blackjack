@@ -3,6 +3,11 @@ package house;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Deck class stores the deck itself consisting of a specified number of 54-card decks.
+ * @author Loroseco
+ *
+ */
 class Deck {
 	private int nOfDecks;
 	private String[] singleSuit = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
@@ -16,6 +21,9 @@ class Deck {
 		this.nOfDecks = nOfDecks;
 	}
 	
+	/**
+	 * Creates a shuffled ArrayList consisting of the specified number of decks
+	 */
 	void makeDeck() {
 		this.deck = new ArrayList<String>(nOfDecks * 54);
 		for (int deck = 0; deck < nOfDecks; deck++) {
@@ -28,22 +36,37 @@ class Deck {
 		Collections.shuffle(deck);
 	}
 	
+	/**
+	 * Returns the specified number of cards from the deck. 
+	 * Fetched cards are removed from the deck.
+	 * If the deck is less than 1/4th of its original size, it is remade
+	 * @param nOfCards	Number of cards to fetch
+	 * @return			ArrayList of cards
+	 */
 	private ArrayList<String> getCards(int nOfCards) {
 		ArrayList<String> cards = new ArrayList<String>(nOfCards);
 		for (int n = 0; n < nOfCards; n++) {
 			cards.add(deck.get(0));
 			deck.remove(0);
 		}
-		if (deck.size() <= nOfDecks * 13 / 4) {
+		if (deck.size() <= nOfDecks * 13) {
 			makeDeck();
 		}
 		return cards;
 	}
 	
+	/**
+	 * Gets two cards for a hand and removes them from the deck
+	 * @return	ArrayList of 2 cards
+	 */
 	ArrayList<String> getHand() {
 		return getCards(2);
 	}
 	
+	/**
+	 * Gets a card and removes it from the deck
+	 * @return
+	 */
 	String hitMe() {
 		return getCards(1).get(0);
 	}

@@ -3,12 +3,21 @@ package house;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Class to handle player hand storage / display, and player score calculation
+ * @author Loroseco
+ *
+ */
 class Board {
 	
 	private int nOfPlayers;
 	private HashMap<String, Integer> cardValues = new HashMap<String, Integer>();
 	private ArrayList<ArrayList<String>> playerHands = new ArrayList<ArrayList<String>>();
 	
+	/**
+	 * Board constructor. Populates cardValues in order to calculate score later
+	 * @param nOfPlayers	Number of players not including dealer
+	 */
 	Board(int nOfPlayers) {
 		this.nOfPlayers = nOfPlayers;
 		cardValues.put("A", 11);
@@ -26,6 +35,11 @@ class Board {
 		cardValues.put("K", 10);
 	}
 	
+	/**
+	 * Calculates the value of a chosen player's hand
+	 * @param player	Chosen player
+	 * @return			Vaue of player's hand
+	 */
 	int getScore(int player) {
 		int score = 0;
 		ArrayList<String> hand = playerHands.get(player);
@@ -35,19 +49,37 @@ class Board {
 		return score;
 	}
 	
+	/**
+	 * Prints the board after a confirmation, in order to give players enough time to pass the keyboard around
+	 * @param p	Chosen player
+	 */
 	void printBoardBeforeTurn(int p) {
+		//TODO: Do something here as a confirmation that the correct player is at the keyboard
+		printBoard(p);
+	}
+	
+	/**
+	 * Prints the board, displaying only the chosen player's hand, and one card from the dealer's hand
+	 * @param p	Chosen player
+	 */
+	void printBoard(int p) {
 		//TODO: Implement
 	}
 	
-	void printBoardAfterTurn(int p) {
-		//TODO: Implement
-	}
-	
+	/**
+	 * Adds a new player hand to the playerHands ArrayList
+	 * @param hand	New hand
+	 */
 	void addHand(ArrayList<String> hand) {
 		playerHands.add(hand);
 		
 	}
 	
+	/**
+	 * Adds a new card to a chosen player's hand
+	 * @param card	New card
+	 * @param hand	Chosen player's hand
+	 */
 	void addCard(String card, int hand) {
 		playerHands.get(hand).add(card);
 	}

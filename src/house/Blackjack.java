@@ -4,6 +4,11 @@ import java.util.Scanner;
 
 import client.*;
 
+/**
+ * Class containing the "play" function, controls the order of actions in the game and calculates the winner
+ * @author Loroseco
+ *
+ */
 public class Blackjack {
 	
 	private Player[] players;
@@ -13,6 +18,12 @@ public class Blackjack {
 	private boolean[] stillInPlay;
 	private Scanner scan;
 	
+	/**
+	 * Class called to initiate a game
+	 * @param nOfPlayers	Number of players (not including dealer)
+	 * @param nOfDecks		Number of decks to be shuffled together to create the main deck
+	 * @param scan			Scanner object
+	 */
 	void play(int nOfPlayers, int nOfDecks, Scanner scan) {
 		
 		players = new Player[nOfPlayers + 1];
@@ -50,6 +61,9 @@ public class Blackjack {
 		}
 	}
 	
+	/**
+	 * Populates the board with players' initial hands
+	 */
 	private void startGame() {
 		for (int p = 0; p < players.length; p++) {
 			board.addHand(deck.getHand());
@@ -57,6 +71,10 @@ public class Blackjack {
 		board.printBoardBeforeTurn(0);
 	}
 	
+	/**
+	 * Cycles through all human player turns until 21 is reached, all players have stood/folded or all are bust
+	 * @return	Winning player
+	 */
 	private int playHumans() {
 		boolean end = false;
 		int turnNumber = 0;
@@ -66,20 +84,24 @@ public class Blackjack {
 				if (stillInPlay[p]) {
 					board.printBoardBeforeTurn(p);
 					playTurn(p);
-					board.printBoardAfterTurn(p);
+					board.printBoard(p);
 				}
 			}
 			
-			end = !anyStillInPlay(turnNumber);
+			end = !anyStillInPlay();
 		}
 		
 		return calculatePlayerWinner(turnNumber);
 	}
 	
-	private boolean anyStillInPlay(int turnNumber) {
+	/**
+	 * Checks if there are any players still in play
+	 * @return	boolean
+	 */
+	private boolean anyStillInPlay() {
 		boolean end = false;
 		for (int p = 1; p < players.length; p++) {
-			if (playerScores[p] == 21 && turnNumber == 1) {
+			if (playerScores[p] == 21) {
 				end = false;
 				break;
 			} else if (stillInPlay[p]) {
@@ -88,7 +110,11 @@ public class Blackjack {
 		}
 		return end;
 	}
-	
+	/**
+	 * Calculates which human player has won the game
+	 * @param turnNumber	Turn number - important since 21 on first turn affects the dealer's play
+	 * @return				Winning player
+	 */
 	private int calculatePlayerWinner(int turnNumber) {
 		int winner = 0;
 		for (int p = 1; p < players.length; p++) {
@@ -102,12 +128,21 @@ public class Blackjack {
 		return winner;
 	}
 	
+	/**
+	 * Plays a single turn 
+	 * @param p	Player number
+	 */
 	private void playTurn(int p) {
 		String move = getMove(p);
 		makeMove(p, move);
 		playerScores[p] = board.getScore(p);		
 	}
 	
+	/**
+	 * Fetches move from player class
+	 * @param p	Player number
+	 * @return	Chosen move
+	 */
 	private String getMove(int p) {
 		String move;
 		if (p == 0) {
@@ -118,6 +153,11 @@ public class Blackjack {
 		return move;
 	}
 	
+	/**
+	 * Applies player move
+	 * @param p		Player number
+	 * @param move	Chosen move
+	 */
 	private void makeMove(int p, String move) {
 		if (move.equals("H")) {
 			board.addCard(deck.hitMe(), p);
@@ -129,6 +169,10 @@ public class Blackjack {
 		}
 	}
 	
+	/**
+	 * Declares a winner
+	 * @param p	Winning player
+	 */
 	private void declareWinner(int p) {
 		if (p == 0) {
 			System.out.println("THE HOUSE ALWAYS WINS.");
@@ -137,6 +181,11 @@ public class Blackjack {
 		}
 	}
 	
+	/**
+	 * Plays the dealer until he stands or is bust
+	 * @param playerHas21	Did a human player get 21 in their first turn (only gives dealer 1 turn if so)
+	 * @return
+	 */
 	private int playDealer(boolean playerHas21) {
 		while (playerScores[0] < 21) {
 			playTurn(0);
