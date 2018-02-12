@@ -24,18 +24,20 @@ public class Blackjack {
 	 * @param nOfDecks		Number of decks to be shuffled together to create the main deck
 	 * @param scan			Scanner object
 	 */
-	void play(int nOfPlayers, int nOfDecks, Scanner scan) {
+	void play(int nOfPlayers, Deck deck, Scanner scan) {
 		
 		players = new Player[nOfPlayers + 1];
 		players[0] = new Dealer();
 		for (int n = 0; n < nOfPlayers; n++) {
 			players[n + 1] = new Human();
 		}
+		
+		this.deck = deck;
+		this.scan = scan;
+		
+		board = new Board(nOfPlayers);
 		playerScores = new int[nOfPlayers + 1];
 		stillInPlay = new boolean[nOfPlayers + 1];
-		deck = new Deck(nOfDecks);
-		board = new Board(nOfPlayers);
-		this.scan = scan;
 		
 		for (int i = 0; i < nOfPlayers + 1; i++) {
 			playerScores[i] = 0;
