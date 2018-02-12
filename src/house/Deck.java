@@ -5,18 +5,24 @@ import java.util.Collections;
 
 class Deck {
 	private int nOfDecks;
-	private String[] singleDeck = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+	private String[] singleSuit = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
 	private ArrayList<String> deck;
 	
+	/**
+	 * Deck constructor
+	 * @param nOfDecks	Number of decks to be shuffled into the game
+	 */
 	Deck(int nOfDecks) {
 		this.nOfDecks = nOfDecks;
 	}
 	
 	void makeDeck() {
-		deck = new ArrayList<String>(nOfDecks * 13);
-		for (int d = 0; d < nOfDecks; d++) {
-			for (int c = 0; c < 13; c++) {
-				deck.add(singleDeck[c]);
+		this.deck = new ArrayList<String>(nOfDecks * 54);
+		for (int deck = 0; deck < nOfDecks; deck++) {
+			for (int suit = 0; suit < 4; suit++) {
+				for (int card = 0; card < 31; card++) {
+					this.deck.add(singleSuit[card]);
+				}
 			}
 		}
 		Collections.shuffle(deck);
