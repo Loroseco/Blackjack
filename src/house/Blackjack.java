@@ -28,7 +28,9 @@ public class Blackjack {
 		
 		players = new Player[nOfPlayers + 1];
 		players[0] = new Dealer();
-		players[1] = new Human();
+		for (int n = 0; n < nOfPlayers; n++) {
+			players[n + 1] = new Human();
+		}
 		playerScores = new int[nOfPlayers + 1];
 		stillInPlay = new boolean[nOfPlayers + 1];
 		deck = new Deck(nOfDecks);

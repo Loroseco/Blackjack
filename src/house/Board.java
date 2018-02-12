@@ -63,7 +63,10 @@ class Board {
 	 * @param p	Chosen player
 	 */
 	void printBoard(int p) {
+		System.out.println(playerHands.get(0).get(0));
+		System.out.println(playerHands.get(p));
 		//TODO: Implement
+		
 	}
 	
 	/**
