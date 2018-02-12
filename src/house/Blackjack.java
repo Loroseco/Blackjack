@@ -45,17 +45,12 @@ public class Blackjack {
 		startGame();
 		
 		int playerWinner = playHumans();
-		
+
 		if (playerWinner == 0) {
 			declareWinner(0);
 		} else {
-			if (playerScores[playerWinner] == 22) {
-				playDealer(true);
-			} else {
-				playDealer(false);
-			}
-
-			if (playerScores[0] >= playerScores[playerWinner]) {
+			playDealer();
+			if (playerScores[0] >= playerScores[playerWinner] && playerScores[0] < 21) {
 				declareWinner(0);
 			} else {
 				declareWinner(1);
@@ -70,6 +65,7 @@ public class Blackjack {
 		deck.createDeck();
 		for (int p = 0; p < players.length; p++) {
 			board.addHand(deck.getHand());
+			playerScores[p] = board.getScore(p);
 		}
 		board.printBoardBeforeTurn(0);
 	}
@@ -79,10 +75,8 @@ public class Blackjack {
 	 * @return	Winning player
 	 */
 	private int playHumans() {
-		boolean end = false;
-		int turnNumber = 0;
+		boolean end = findBlackjack();
 		while (!end) {
-			turnNumber++;
 			for (int p = 1; p < players.length; p++) {
 				if (stillInPlay[p]) {
 					board.printBoardBeforeTurn(p);
@@ -90,11 +84,19 @@ public class Blackjack {
 					board.printBoard(p);
 				}
 			}
-			
 			end = !anyStillInPlay();
 		}
 		
-		return calculatePlayerWinner(turnNumber);
+		return calculatePlayerWinner();
+	}
+	
+	private boolean findBlackjack() {
+		for (int p = 0; p < players.length; p++) {
+			if (playerScores[p] == 21) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/**
@@ -118,15 +120,12 @@ public class Blackjack {
 	 * @param turnNumber	Turn number - important since 21 on first turn affects the dealer's play
 	 * @return				Winning player
 	 */
-	private int calculatePlayerWinner(int turnNumber) {
+	private int calculatePlayerWinner() {
 		int winner = 0;
 		for (int p = 1; p < players.length; p++) {
 			if (playerScores[p] > playerScores[winner] && playerScores[p] < 22) {
 				winner = p;
 			}
-		}
-		if (playerScores[winner] == 21 && turnNumber == 1) {
-			playerScores[winner] = 22;
 		}
 		return winner;
 	}
@@ -190,15 +189,9 @@ public class Blackjack {
 	 * @param playerHas21	Did a human player get 21 in their first turn (only gives dealer 1 turn if so)
 	 * @return
 	 */
-	private int playDealer(boolean playerHas21) {
+	private int playDealer() {
 		while (playerScores[0] < 21) {
 			playTurn(0);
-			if (playerHas21) {
-				if (playerScores[0] == 21) {
-					playerScores[0] = 22;
-				}
-				break;
-			}
 		}
 		return 0;
 	}

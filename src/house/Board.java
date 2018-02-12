@@ -46,6 +46,7 @@ class Board {
 		for (String card : hand) {
 			score += cardValues.get(card);
 		}
+
 		if (score > 21 && hand.contains("A")) {
 			score -= 10;
 		}
