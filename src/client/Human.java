@@ -2,6 +2,11 @@ package client;
 
 import java.util.Scanner;
 
+/**
+ * Class for human player
+ * @author Loroseco
+ *
+ */
 public class Human extends Player {
 	
 	@Override

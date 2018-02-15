@@ -50,6 +50,7 @@ class Deck {
 			deck.remove(0);
 		}
 		if (deck.size() <= nOfDecks * 13) {
+			System.out.println("RESHUFFLING DECK.");
 			createDeck();
 		}
 		return cards;

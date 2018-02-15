@@ -10,6 +10,7 @@ import java.util.HashMap;
  */
 class Board {
 	
+	private Deck deck;
 	private int nOfPlayers;
 	private HashMap<String, Integer> cardValues = new HashMap<String, Integer>();
 	private ArrayList<ArrayList<String>> playerHands = new ArrayList<ArrayList<String>>();
@@ -18,8 +19,12 @@ class Board {
 	 * Board constructor. Populates cardValues in order to calculate score later
 	 * @param nOfPlayers	Number of players not including dealer
 	 */
-	Board(int nOfPlayers) {
+	Board(int nOfPlayers, int nOfDecks) {
 		this.nOfPlayers = nOfPlayers;
+		
+		deck = new Deck(nOfDecks);
+		deck.createDeck();
+		
 		cardValues.put("A", 11);
 		cardValues.put("2", 2);
 		cardValues.put("3", 3);
@@ -33,6 +38,14 @@ class Board {
 		cardValues.put("J", 10);
 		cardValues.put("Q", 10);
 		cardValues.put("K", 10);
+	}
+	
+	/**
+	 * Accessor
+	 * @return	Number of players (not including dealer)
+	 */
+	int getNOfPlayers() {
+		return nOfPlayers;
 	}
 	
 	/**
@@ -77,11 +90,24 @@ class Board {
 		
 	}
 	
+	void newGame() {
+		playerHands = new ArrayList<ArrayList<String>>(nOfPlayers);
+		addHand(deck.getHand());
+	}
+	
+	/**
+	 * Draws a card from the deck and adds it to chosen player's hand
+	 * @param p
+	 */
+	void hitMe(int p) {
+		addCard(deck.hitMe(), p);
+	}
+	
 	/**
 	 * Adds a new player hand to the playerHands ArrayList
 	 * @param hand	New hand
 	 */
-	void addHand(ArrayList<String> hand) {
+	private void addHand(ArrayList<String> hand) {
 		playerHands.add(hand);
 		
 	}
@@ -91,7 +117,7 @@ class Board {
 	 * @param card	New card
 	 * @param hand	Chosen player's hand
 	 */
-	void addCard(String card, int hand) {
+	private void addCard(String card, int hand) {
 		playerHands.get(hand).add(card);
 	}
 

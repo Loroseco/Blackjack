@@ -1,5 +1,10 @@
 package client;
 
+/**
+ * Class for AI
+ * @author Loroseco
+ *
+ */
 public class Dealer extends Player {
 	
 	@Override

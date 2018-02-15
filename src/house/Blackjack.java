@@ -12,7 +12,6 @@ import client.*;
 public class Blackjack {
 	
 	private Player[] players;
-	private Deck deck;
 	private Board board;
 	private int[] playerScores;
 	private boolean[] stillInPlay;
@@ -24,18 +23,17 @@ public class Blackjack {
 	 * @param nOfDecks		Number of decks to be shuffled together to create the main deck
 	 * @param scan			Scanner object
 	 */
-	void play(int nOfPlayers, Deck deck, Scanner scan) {
-		
+	void play(Board board, Scanner scan) {
+		int nOfPlayers = board.getNOfPlayers();
 		players = new Player[nOfPlayers + 1];
 		players[0] = new Dealer();
 		for (int n = 0; n < nOfPlayers; n++) {
 			players[n + 1] = new Human();
 		}
 		
-		this.deck = deck;
+		this.board = board;
 		this.scan = scan;
 		
-		board = new Board(nOfPlayers);
 		playerScores = new int[nOfPlayers + 1];
 		stillInPlay = new boolean[nOfPlayers + 1];
 		
@@ -64,9 +62,8 @@ public class Blackjack {
 	 * Populates the board with players' initial hands
 	 */
 	private void startGame() {
-		deck.createDeck();
+		board.newGame();
 		for (int p = 0; p < players.length; p++) {
-			board.addHand(deck.getHand());
 			playerScores[p] = board.getScore(p);
 		}
 		board.printBoardBeforeTurn(0);
@@ -140,7 +137,7 @@ public class Blackjack {
 		while (true) {
 			String move = getMove(p);
 			if (move.toLowerCase().equals("h")) {
-				board.addCard(deck.hitMe(), p);
+				board.hitMe(p);
 				playerScores[p] = board.getScore(p);
 				if (playerScores[p] > 21) {
 					stillInPlay[p] = false;

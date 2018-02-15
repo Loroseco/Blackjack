@@ -1,5 +1,9 @@
 package client;
-
+/**
+ * Parent class for players
+ * @author Loroseco
+ *
+ */
 public abstract class Player {
 	/**
 	 * Fetches move
