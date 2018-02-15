@@ -79,7 +79,9 @@ public class Bank {
 			winnings += amountBet[p];
 			amountBet[p] = 0;
 		}
-		accounts[winner] += winnings;
+		if (w != 0) {
+			accounts[winner] += winnings;
+		}
 	}
 	
 	

@@ -8,8 +8,9 @@ public class Main {
 		Blackjack game = new Blackjack();
 		Scanner scan = new Scanner(System.in);
 		Board board = new Board(1, 5);
+		Bank bank = new Bank(1, 10);
 		while (true) {
-			game.play(board, scan);
+			game.play(board, bank, scan);
 			System.out.print("PLAY AGAIN? (Y/N): ");
 			String input = scan.next();
 			if (!input.toLowerCase().equals("y")) {

@@ -13,6 +13,7 @@ public class Blackjack {
 	
 	private Player[] players;
 	private Board board;
+	private Bank bank;
 	private int[] playerScores;
 	private boolean[] stillInPlay;
 	private Scanner scan;
@@ -23,7 +24,7 @@ public class Blackjack {
 	 * @param nOfDecks		Number of decks to be shuffled together to create the main deck
 	 * @param scan			Scanner object
 	 */
-	void play(Board board, Scanner scan) {
+	void play(Board board, Bank bank, Scanner scan) {
 		int nOfPlayers = board.getNOfPlayers();
 		players = new Player[nOfPlayers + 1];
 		players[0] = new AI();
@@ -32,6 +33,7 @@ public class Blackjack {
 		}
 		
 		this.board = board;
+		this.bank = bank;
 		this.scan = scan;
 		
 		playerScores = new int[nOfPlayers + 1];
@@ -65,6 +67,7 @@ public class Blackjack {
 		board.newGame();
 		for (int p = 0; p < players.length; p++) {
 			playerScores[p] = board.getScore(p);
+			bank.placeBet(p, 1);
 		}
 		board.printBoardBeforeTurn(0);
 	}
@@ -148,6 +151,7 @@ public class Blackjack {
 				break;
 			} else if (move.toLowerCase().equals("f")) {
 				playerScores[p] = -1;
+				bank.fold(p);
 				stillInPlay[p] = false;
 				break;
 			} else {
@@ -176,6 +180,7 @@ public class Blackjack {
 	 * @param p	Winning player
 	 */
 	private void declareWinner(int p) {
+		bank.giveWinnings(p);
 		board.printBoard(0);
 		if (p == 0) {
 			System.out.println("THE HOUSE ALWAYS WINS.");
