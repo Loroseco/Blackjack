@@ -92,7 +92,9 @@ class Board {
 	
 	void newGame() {
 		playerHands = new ArrayList<ArrayList<String>>(nOfPlayers);
-		addHand(deck.getHand());
+		for (int p = 0; p < nOfPlayers + 1; p++) {
+			addHand(deck.getHand());
+		}
 	}
 	
 	/**
