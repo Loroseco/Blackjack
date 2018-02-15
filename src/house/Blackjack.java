@@ -122,7 +122,7 @@ public class Blackjack {
 	private int calculatePlayerWinner() {
 		int winner = 0;
 		for (int p = 1; p < players.length; p++) {
-			if (playerScores[p] > playerScores[winner] && playerScores[p] < 22) {
+			if (playerScores[p] > playerScores[winner] && playerScores[p] < 22 && playerScores[p] != -1) {
 				winner = p;
 			}
 		}
@@ -147,6 +147,7 @@ public class Blackjack {
 				stillInPlay[p] = false;
 				break;
 			} else if (move.toLowerCase().equals("f")) {
+				playerScores[p] = -1;
 				stillInPlay[p] = false;
 				break;
 			} else {
