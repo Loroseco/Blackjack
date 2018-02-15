@@ -26,7 +26,7 @@ public class Blackjack {
 	void play(Board board, Scanner scan) {
 		int nOfPlayers = board.getNOfPlayers();
 		players = new Player[nOfPlayers + 1];
-		players[0] = new Dealer();
+		players[0] = new AI();
 		for (int n = 0; n < nOfPlayers; n++) {
 			players[n + 1] = new Human();
 		}

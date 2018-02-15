@@ -5,7 +5,7 @@ package client;
  * @author Loroseco
  *
  */
-public class Dealer extends Player {
+public class AI extends Player {
 	
 	@Override
 	public String getMove(Object obj) {
